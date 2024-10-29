@@ -1,4 +1,4 @@
-package login
+package roles
 
 type Role struct {
 	Id   int    `json:"id"`

@@ -1,4 +1,4 @@
-package login
+package roles
 
 import (
 	"trabea/app"
@@ -10,7 +10,12 @@ func GetRolesData() ([]Role, error) {
 		return nil, err
 	}
 
-	rows, err := conn.Query("SELECT id, name FROM roles")
+	rows, err := conn.Query(`
+		SELECT
+			id,
+			name
+		FROM roles
+	`)
 	if err != nil {
 		defer conn.Close()
 		return nil, err
