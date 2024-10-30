@@ -39,13 +39,16 @@ func GetLoginData(req ReqLogin) (*ResLogin, error) {
 		FROM users
 		WHERE email = $1
 	`, req.Email)
+	defer conn.Close()
 	if err != nil {
 		println(err.Error())
-		defer conn.Close()
 		return nil, err
 	}
 
+	count := 0
 	for rows.Next() {
+		count += 1
+
 		var password string
 		if err := rows.Scan(&password); err != nil {
 			println(err.Error())
@@ -53,10 +56,14 @@ func GetLoginData(req ReqLogin) (*ResLogin, error) {
 		}
 		valid := passwordCheck(password, req.Password)
 		if !valid {
-			println(err.Error())
-			err := errors.New("account not found")
+			println("checking password failed miserably")
+			err := errors.New("checking password failed miserably")
 			return nil, err
 		}
+	}
+
+	if count <= 0 {
+		return nil, nil
 	}
 
 	token, err := createToken(req)

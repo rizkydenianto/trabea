@@ -16,11 +16,10 @@ func GetRolesData() ([]Role, error) {
 			name
 		FROM roles
 	`)
+	defer conn.Close()
 	if err != nil {
-		defer conn.Close()
 		return nil, err
 	}
-	defer rows.Close()
 
 	var roles []Role
 	for rows.Next() {
@@ -30,5 +29,10 @@ func GetRolesData() ([]Role, error) {
 		}
 		roles = append(roles, role)
 	}
+
+	if len(roles) <= 0 {
+		return nil, nil
+	}
+
 	return roles, nil
 }
