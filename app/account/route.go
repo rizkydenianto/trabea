@@ -9,7 +9,7 @@ import (
 func Login(c *gin.Context) {
 	var req ReqLogin
 	if err := c.ShouldBindJSON(&req); err != nil {
-		c.IndentedJSON(http.StatusInternalServerError, gin.H{})
+		c.IndentedJSON(http.StatusBadRequest, gin.H{})
 		return
 	}
 
